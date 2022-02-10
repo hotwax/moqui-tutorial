@@ -1,1 +1,1 @@
-# moqui-training
+# moqui-tutorial
