@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
+
+    <!-- Sample service to get Order Header details by statusId using Entity Find -->
+    <service verb="get" noun="OrderHeadersByStatus">
+        <description>
+            Service to get OrderHeader records based on the given statusId.
+        </description>
+        <in-parameters>
+            <parameter name="statusId" default-value="OrderApproved">
+                <description>The status for the Order Header. If no value is provided,
+                    the default value for statusId will be "OrderApproved."</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="ordersList"/>
+        </out-parameters>
+        <actions>
+            <!-- Find OrderHeader records -->
+            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
+                <econdition field-name="statusId"/>
+            </entity-find>
+
+            <!-- The ordersList will be returned as the output. -->
+        </actions>
+    </service>
+</services>
