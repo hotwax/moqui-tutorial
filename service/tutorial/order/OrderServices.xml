@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
+
+    <service verb="get" noun="FemalePersons">
+        <description>
+            Person records for all females
+        </description>
+        <out-parameters>
+            <parameter name="orderList" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="orderList">
+                <econdition field-name="gender" operator="equals" value="F"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="Persons">
+        <description>
+            List the Person details with MarsMarried marital status
+        </description>
+        <out-parameters>
+            <parameter name="orderList" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="orderList">
+                <econdition field-name="maritalStatusEnumId" operator="in" value="MarsMarried"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="LatestOrders">
+        <description>
+            Find all Order Header records so that the latest placed order appears at the top
+        </description>
+        <out-parameters>
+            <parameter name="orderList" type="List"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orders" list="orderList">
+                <order-by field-name= "-placedDate"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="Order">
+        <description>
+            Find the Order Header details for a given orderId.
+        </description>
+        <in-parameters>
+            <parameter name="orderId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderDetails" type="List"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orders" list="orderDetails">
+             <econdition field-name="orderId"/>
+            </entity-find>
+        </actions>
+    </service>
+    
+    <service verb="get" noun="OrderHeaders">
+        <description>
+            Find all Order Header records with the grandTotal greater than 50
+        </description>
+        <out-parameters>
+            <parameter name="orderHeaderDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orders" list="orderHeaderDetails">
+                <econdition field-name="grandTotal" operator="greater" value="50"/>
+            </entity-find>
+        </actions>
+    </service>
+    
+    <service verb="get" noun="OrderItems">
+        <description>
+            List all Order Item details for the order with orderId, 100102 and orderPartSeqId, 01
+        </description>
+        <out-parameters>
+            <parameter name="orderItemDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orderItems" list="orderItemDetails">
+                <econdition field-name="orderId" value="100102"/>
+                <econdition field-name="orderPartSeqId" value="01"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="OrderParts">
+       <description>
+           Find all Order Parts with partTotal less than equals to 20.
+       </description>
+        <out-parameters>
+            <parameter name="orderPartDetails"/>
+        </out-parameters>
+        <actions>
+           <entity-find entity-name="orderParts" list="orderPartDetails">
+               <econdition field-name="partTotal"  operator="less-equals" value="20"/>
+           </entity-find>
+        </actions>
+    </service>
+    
+    <service verb="get" noun="OrderPartData">
+        <description>
+            Find all Order Part records assigned to the facility with ZIRET_WH value
+        </description>
+        <out-parameters>
+            <parameter name="orderPartDetails" type="list"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orderParts" list="orderList">
+                <econdition field-name="facilityId"  value="ZIRET_WH"/>
+             </entity-find>
+            <set field="orderPartDetails" value="[]"/>
+            <iterate list="orderList" entry="part">
+                <set field="orderId" from="part.orderId"/>
+                <set field="facilityId" from="part.facilityId"/>
+                <set field="partMap" from="[orderId:orderId,facilityId:facilityId]"/>
+                <set field="orderPartDetails" from="orderPartDetails+partMap"/>
+            </iterate>
+        </actions>
+    </service>
+    
+    <service verb="get" noun="OrderPartsCount">
+        <description>
+            Find the count of order parts for the customer Party Id, “CustJqp”
+        </description>
+        <out-parameters>
+            <parameter name="orderPartsCount"/>
+        </out-parameters>
+        <actions>
+            <entity-find-count entity-name="orderParts" count-field="orderPartsCount">
+                <econdition field-name="customerPartyId" operator="equals" value="CustJqp"/>
+            </entity-find-count>
+        </actions>
+    </service>
+
+    <service verb="get" noun="OrderPartsInfo">
+        <description>
+            Find all unique Order Parts with shipmentMethodEnumId value 
+            as “ShtMthGround” and facilityId as “ZIRET_WH”
+        </description>
+        <out-parameters>
+            <parameter name="orderPartsList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orderParts" list="orderPartsList">
+                <econdition field-name="shipmentMethodEnumId" operator="equals" value="ShtMthGround"/>
+                <econdition field-name="facilityId" operator="equals" value="ZIRET_WH"/>
+            </entity-find>
+        </actions>
+    </service>
+
+</services>
