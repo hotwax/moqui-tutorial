@@ -10,7 +10,7 @@
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.party.Person" list="orderList">
-                <econdition field-name="gender" operator="equals" value="F"/>
+                <econdition field-name="gender" value="F"/>
             </entity-find>
         </actions>
     </service>
@@ -24,7 +24,7 @@
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.party.Person" list="orderList">
-                <econdition field-name="maritalStatusEnumId" operator="in" value="MarsMarried"/>
+                <econdition field-name="maritalStatusEnumId" value="MarsMarried"/>
             </entity-find>
         </actions>
     </service>
@@ -116,9 +116,8 @@
              </entity-find>
             <set field="orderPartDetails" value="[]"/>
             <iterate list="orderList" entry="part">
-                <set field="orderId" from="part.orderId"/>
                 <set field="facilityId" from="part.facilityId"/>
-                <set field="partMap" from="[orderId:orderId,facilityId:facilityId]"/>
+                <set field="partMap" from="[orderId:part.orderId,facilityId:facilityId]"/>
                 <set field="orderPartDetails" from="orderPartDetails+partMap"/>
             </iterate>
         </actions>
@@ -133,23 +132,22 @@
         </out-parameters>
         <actions>
             <entity-find-count entity-name="orderParts" count-field="orderPartsCount">
-                <econdition field-name="customerPartyId" operator="equals" value="CustJqp"/>
+                <econdition field-name="customerPartyId" value="CustJqp"/>
             </entity-find-count>
         </actions>
     </service>
 
     <service verb="get" noun="OrderPartsInfo">
         <description>
-            Find all unique Order Parts with shipmentMethodEnumId value 
-            as “ShtMthGround” and facilityId as “ZIRET_WH”
+            Find all unique Order Parts with shipmentMethodEnumId value as “ShtMthGround” and facilityId as “ZIRET_WH”
         </description>
         <out-parameters>
             <parameter name="orderPartsList"/>
         </out-parameters>
         <actions>
-            <entity-find entity-name="orderParts" list="orderPartsList">
-                <econdition field-name="shipmentMethodEnumId" operator="equals" value="ShtMthGround"/>
-                <econdition field-name="facilityId" operator="equals" value="ZIRET_WH"/>
+            <entity-find entity-name="orderParts" list="orderPartsList" distinct="true">
+                <econdition field-name="shipmentMethodEnumId" value="ShtMthGround"/>
+                <econdition field-name="facilityId" value="ZIRET_WH"/>
             </entity-find>
         </actions>
     </service>
