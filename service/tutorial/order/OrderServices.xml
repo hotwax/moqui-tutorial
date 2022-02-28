@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
 
     <service verb="get" noun="FemalePersons">
         <description>
@@ -38,7 +39,7 @@
         </out-parameters>
         <actions>
             <entity-find entity-name="orders" list="orderList">
-                <order-by field-name= "-placedDate"/>
+                <order-by field-name="-placedDate"/>
             </entity-find>
         </actions>
     </service>
@@ -55,11 +56,11 @@
         </out-parameters>
         <actions>
             <entity-find entity-name="orders" list="orderDetails">
-             <econdition field-name="orderId"/>
+                <econdition field-name="orderId"/>
             </entity-find>
         </actions>
     </service>
-    
+
     <service verb="get" noun="OrderHeaders">
         <description>
             Find all Order Header records with the grandTotal greater than 50
@@ -73,7 +74,7 @@
             </entity-find>
         </actions>
     </service>
-    
+
     <service verb="get" noun="OrderItems">
         <description>
             List all Order Item details for the order with orderId, 100102 and orderPartSeqId, 01
@@ -90,19 +91,19 @@
     </service>
 
     <service verb="get" noun="OrderParts">
-       <description>
-           Find all Order Parts with partTotal less than equals to 20.
-       </description>
+        <description>
+            Find all Order Parts with partTotal less than equals to 20.
+        </description>
         <out-parameters>
             <parameter name="orderPartDetails"/>
         </out-parameters>
         <actions>
-           <entity-find entity-name="orderParts" list="orderPartDetails">
-               <econdition field-name="partTotal"  operator="less-equals" value="20"/>
-           </entity-find>
+            <entity-find entity-name="orderParts" list="orderPartDetails">
+                <econdition field-name="partTotal" operator="less-equals" value="20"/>
+            </entity-find>
         </actions>
     </service>
-    
+
     <service verb="get" noun="OrderPartData">
         <description>
             Find all Order Part records assigned to the facility with ZIRET_WH value
@@ -112,8 +113,8 @@
         </out-parameters>
         <actions>
             <entity-find entity-name="orderParts" list="orderList">
-                <econdition field-name="facilityId"  value="ZIRET_WH"/>
-             </entity-find>
+                <econdition field-name="facilityId" value="ZIRET_WH"/>
+            </entity-find>
             <set field="orderPartDetails" value="[]"/>
             <iterate list="orderList" entry="part">
                 <set field="facilityId" from="part.facilityId"/>
@@ -122,7 +123,7 @@
             </iterate>
         </actions>
     </service>
-    
+
     <service verb="get" noun="OrderPartsCount">
         <description>
             Find the count of order parts for the customer Party Id, “CustJqp”
@@ -173,6 +174,40 @@
         </actions>
     </service>
 
+    <service verb="create" noun="OrderDetails">
+        <description>
+            This service will create OrderPart data
+        </description>
+        <in-parameters>
+            <parameter name="orderId" required="true"/>
+            <parameter name="partName"/>
+            <parameter name="facilityId" required="true"/>
+            <parameter name="shipmentMethodEnumId"/>
+            <parameter name="customerPartyId" required="true"/>
+            <parameter name="item_details" type="List">
+                <parameter name="itemMap" type="Map">
+                    <parameter name="productId"/>
+                    <parameter name="itemDescription"/>
+                    <parameter name="quantity"/>
+                    <parameter name="unitAmount"/>
+                </parameter>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderId" required="true"/>
+            <parameter name="orderPartSeqId" required="true"/>
+        </out-parameters>
+        <actions>
+            <service-call name="create#mantle.order.OrderPart" in-map="context" out-map="context"/>
+
+            <iterate list="item_details" entry="orderItem">
+                <service-call name="create#mantle.order.OrderItem" in-map="[orderId:context.orderId,
+                orderPartSeqId:context.orderPartSeqId,productId:orderItem.productId,
+                              itemDescription:orderItem.itemDescription,quantity:orderItem.quantity,
+                              unitAmount:orderItem.unitAmount]" out-map="context"/>
+            </iterate>
+        </actions>
+    </service>
 
 
 </services>
