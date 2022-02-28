@@ -152,4 +152,27 @@
         </actions>
     </service>
 
+    <service verb="create" noun="OrderHeader">
+        <description>
+            This service will create the Order_Header detail.
+        </description>
+        <in-parameters>
+            <parameter name="orderName" required="true"/>
+            <parameter name="currencyUomId" default-value="USD"/>
+            <parameter name="salesChannelEnumId"/>
+            <parameter name="statusId" default-value="orderPlaced"/>
+            <parameter name="placedDate" required="true"/>
+            <parameter name="productStoreId"/>
+            <parameter name="approvedDate"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderId" required="true"/>
+        </out-parameters>
+        <actions>
+            <service-call name="create#mantle.order.OrderHeader" in-map="context" out-map="context"/>
+        </actions>
+    </service>
+
+
+
 </services>
