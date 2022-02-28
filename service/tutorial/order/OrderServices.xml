@@ -133,7 +133,7 @@
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.order.OrderPart" list="orderPartsList">
-                <econdition field-name="shipmentMethodEnumId" value="ShtMthGround"/>
+                <econdition field-name="shipmentMethodEnumId" value="ShMthNextDay"/>
                 <econdition field-name="facilityId" value="ZIRET_WH"/>
             </entity-find>
         </actions>
