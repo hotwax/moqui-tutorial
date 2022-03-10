@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-2.1.xsd"
+          name="order" displayName="order REST API" version="2.0.0">
+
+    <resource name="orders" require-authentication="anonymous-all">
+                <method type="post">
+                <service name="tutorial.order.OrderServices.create#CreateData"/>
+                </method>
+
+                <method type="post">
+                    <service name="tutorial.order.OrderServices.add#AddItem"/>
+                </method>
+
+               <method type="get">
+                  <service name="tutorial.order.OrderServices.get#AllOrders"/>
+               </method>
+
+               <id name="orderId">
+                    <method type="get">
+                        <service name="tutorial.order.OrderServices.get#OneOrder"/>
+                    </method>
+
+               <method type="patch">
+                    <service name="tutorial.order.OrderServices.update#UpdateOrder"/>
+               </method>
+               </id>
+
+    </resource>
+</resource>
