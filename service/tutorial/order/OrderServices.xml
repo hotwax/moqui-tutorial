@@ -16,7 +16,7 @@
             <parameter name="ordersList"/>
         </out-parameters>
         <actions>
-            <!-- Find OrderHeader records -->
+            <!-- Find OrderHeader reco rds -->
             <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
                 <econdition field-name="statusId"/>
             </entity-find>
@@ -24,4 +24,142 @@
             <!-- The ordersList will be returned as the output. -->
         </actions>
     </service>
+
+    <!-- The personList will be returned of all Females -->
+    <service verb="get" noun="FemalePersons">
+        <out-parameters>
+            <parameter name="personList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="personList">
+                <econdition field-name="gender" value="F"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- The personList will be returned of all Persons with MarsMarried marital status -->
+
+    <service verb="get" noun="Person">
+        <out-parameters>
+            <parameter name="personList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="personList">
+                <econdition field-name="maritalStatusEnumId" value="MarsMarried"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- The orderList will be returned for latest orders -->
+
+    <service verb="get" noun="LatestOrders">
+        <out-parameters>
+            <parameter name="orderList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderHeader" list="orderList">
+                <order-by field-name="-placedDate"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- The orderList will be returned for given orderId -->
+
+    <service verb="get" noun="Order">
+        <in-parameters>
+            <parameter name="orderId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderHeader" list="orderList">
+                <econdition field-name="orderId"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- The orderList will be returned for grand total greater than 50 -->
+
+    <service verb="get" noun="OrderHeaders">
+        <out-parameters>
+            <parameter name="orderHeaderDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderHeader" list="orderHeaderDetails">
+                <econdition field-name="grandTotal" operator="greater" value="50"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- The orderList will be returned for orderId 100102 and orderPartSeqId = 01  -->
+
+    <service verb="get" noun="OrderItems">
+        <out-parameters>
+            <parameter name="orderItemDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderItem" list="orderItemDetails">
+                <econdition field-name="orderId" value="100102"/>
+                <econdition field-name="orderPartSeqId" value="01"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- The orderPart will be returned for partTotal less than or equals to 20 -->
+
+    <service verb="get" noun="OrderPart">
+        <out-parameters>
+            <parameter name="orderPartDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartDetails">
+                <econdition field-name="partTotal" operator="less-equals" value="20"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- The orderPart field will be returned for facility id ZIRET_WH -->
+
+    <service verb="get" noun="OrderPartData">
+        <out-parameters>
+            <parameter name="orderPartDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartDetails">
+                <econdition field-name="facilityId" value="ZIRET_WH"/>
+                <select-field field-name="orderId"/><select-field field-name="orderPartSeqId"/>
+                <select-field field-name="facilityId"/><select-field field-name="partName"/>
+                <select-field field-name="customerPartyId"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <!-- The orderCount field will be returned for customerPartyId CustJqp -->
+
+    <service verb="get" noun="OrderPartCount">
+        <out-parameters>
+            <parameter name="orderPartsCount"/>
+        </out-parameters>
+        <actions>
+            <entity-find-count entity-name="mantle.order.OrderPart" count-field="orderPartsCount">
+                <econdition field-name="customerPartyId" value="CustJqp"/>
+            </entity-find-count>
+        </actions>
+    </service>
+
+    <!-- The orderPartInfo will be returned for facility id ZIRET_WH and shipment Method ShMthGround-->
+
+    <service verb="get" noun="OrderPartsInfo">
+        <out-parameters>
+            <parameter name="orderPartsList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartsList">
+                <econdition field-name="shipmentMethodEnumId" value="ShMthGround"/>
+                <econdition field-name="facilityId" value="ZIRET_WH"/>
+            </entity-find>
+        </actions>
+    </service>
+
 </services>
