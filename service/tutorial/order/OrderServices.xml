@@ -1,27 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
 
-    <!-- Sample service to get Order Header details by statusId using Entity Find -->
-    <service verb="get" noun="OrderHeadersByStatus">
+<!--1-->
+    <service verb="get" noun="FemalePersons">
         <description>
-            Service to get OrderHeader records based on the given statusId.
+            Records of all females.
         </description>
-        <in-parameters>
-            <parameter name="statusId" default-value="OrderApproved">
-                <description>The status for the Order Header. If no value is provided,
-                    the default value for statusId will be "OrderApproved."</description>
-            </parameter>
-        </in-parameters>
         <out-parameters>
-            <parameter name="ordersList"/>
+            <parameter name="orderList" type="list"/>
         </out-parameters>
         <actions>
-            <!-- Find OrderHeader records -->
-            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
-                <econdition field-name="statusId"/>
+            <entity-find entity-name="mantle.party.Person" list="orderList">
+                <econdition field-name="gender" value="F"/>
             </entity-find>
+        </actions>
+    </service>
+<!--2-->
+    <service verb="get" noun="Persons">
+        <description>
+            Person with Married marital status.
+        </description>
+        <out-parameters>
+            <parameter name="orderList" type="List" />
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="orderList">
+                <econdition field-name="maritalStatusEnumId" value="MarsMarried"/>
+            </entity-find>
+        </actions>
+    </service>
+<!--3-->
+    <service verb="get" noun="LatestOrders">
+        <description>
+            Latest order header records in descending order
+        </description>
+        <out-parameters>
+            <parameter name = "orderList" type="List"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orders" list="orderList">
+                <order-by field-name = "placedDate"/>
+            </entity-find>
+        </actions>
+    </service>
+<!--4-->
+    <service verb="get" noun="Order" >
+        <description>
+            Get order header details by order id.
+        </description>
+        <in-parameters>
+            <parameter name="orderId" required = "true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderDetails" type="List"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orders" list="orderDetails">
+                <econdition field-name="orderId"/>
+            </entity-find>
+        </actions>
+    </service>
+<!--5-->
+    <service verb="get" noun="OrderHeaders" >
+        <description>
+            Header records with all Grand Total greater then 50.
+        </description>
+        <out-parameters>
+            <parameter name="orderHeaderDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orders" list="orderHeaderDetails">
+                <econdition field-name="grandTotal" operator="greater" value="50"/>
+            </entity-find>
+        </actions>
+    </service>
+<!--6-->
+    <service verb="get" noun="OrderItems">
+        <description>
+            Order Items with orderId 100102 and orderpartseqid equals 01
+        </description>
+        <out-parameters>
+            <parameter name="orderItemDetails"/>
+        </out-parameters>
 
-            <!-- The ordersList will be returned as the output. -->
+        <actions>
+            <entity-find entity-name="orderItems" list="orderItemDetails">
+                <econdition field-name="orderId" value="100102"/>
+                <econdition field-name="orderPartSeqId" value="01"/>
+            </entity-find>
+        </actions>
+    </service>
+<!--7-->
+    <service verb="get" noun="orderParts">
+        <description>
+            All order parts with parts total less than equals 20.
+        </description>
+        <out-parameters>
+            <parameter name="orderPartDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orderParts" list="orderPartDetails">
+                <econdition field-name="partTotal" operator="less-equals" value="20"/>
+            </entity-find>
+        </actions>
+    </service>
+
+<!--8    -->
+    <service verb="get" noun="OrderPartData">
+        <description>
+            All Order Part records assigned to the facility with ZIRET_WH value.
+        </description>
+        <out-parameters>
+            <parameter name="orderPartDetails" type="list"/>
+        </out-parameters>
+
+        <actions>
+            <entity-find entity-name="orderParts" list="orderList">
+                <econdition field-name="facilityId"  value="ZIRET_WH"/>
+            </entity-find>
+            <set field="orderPartDetails" value="[]"/>
+            <iterate list="orderList" entry="part">
+                <set field="facilityId" from="part.facilityId"/>
+                <set field="partMap" from="[orderId:part.orderId,facilityId:facilityId]"/>
+                <set field="orderPartDetails" from="orderPartDetails+partMap"/>
+            </iterate>
+        </actions>
+    </service>
+<!--9-->
+    <service verb="get" noun="OrderPartsCount">
+        <description>
+            Count of order parts for the customer Party Id, “CustJqp”
+        </description>
+        <out-parameters>
+            <parameter name="orderPartsCount"/>
+        </out-parameters>
+        <actions>
+            <entity-find-count entity-name="orderParts" count-field="orderPartsCount">
+                <econdition field-name="customerPartyId" value="CustJqp"/>
+            </entity-find-count>
+        </actions>
+    </service>
+<!--10-->
+    <service verb="get" noun="OrderPartsInfo">
+        <description>
+            Find all unique Order Parts with shipmentMethodEnumId value as “ShtMthGround” and facilityId as “ZIRET_WH”
+        </description>
+        <out-parameters>
+            <parameter name="orderPartsList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="orderParts" list="orderPartsList" distinct="true">
+                <econdition field-name="shipmentMethodEnumId" value="ShtMthGround"/>
+                <econdition field-name="facilityId" value="ZIRET_WH"/>
+            </entity-find>
         </actions>
     </service>
 </services>
