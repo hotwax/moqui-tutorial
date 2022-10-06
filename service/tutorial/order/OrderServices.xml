@@ -1,27 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
 
-    <!-- Sample service to get Order Header details by statusId using Entity Find -->
-    <service verb="get" noun="OrderHeadersByStatus">
+<!--First-->
+
+    <service verb="create" noun="Order">
         <description>
-            Service to get OrderHeader records based on the given statusId.
+            Create Order
         </description>
         <in-parameters>
-            <parameter name="statusId" default-value="OrderApproved">
-                <description>The status for the Order Header. If no value is provided,
-                    the default value for statusId will be "OrderApproved."</description>
-            </parameter>
+            <parameter name="orderName" required="true"/>
+            <parameter name="currencyUomId" default-value="USxD"/>
+            <parameter name="salesChannelEnumId"/>
+            <parameter name="statusId" default-value="orderPlaced"/>
+            <parameter name="placedDate" required="true"/>
+            <parameter name="productStoreId"/>
+            <parameter name="approvedDate"/>
         </in-parameters>
         <out-parameters>
-            <parameter name="ordersList"/>
+            <parameter name="orderId" required="true"/>
         </out-parameters>
         <actions>
-            <!-- Find OrderHeader records -->
-            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
-                <econdition field-name="statusId"/>
-            </entity-find>
-
-            <!-- The ordersList will be returned as the output. -->
+            <service-call name="create#mantle.order.OrderHeader" in-map="context" out-map="context"/>
         </actions>
     </service>
+
+<!--Second-->
+
+
+
+<!--Third-->
+
+<!--fourth-->
+
+
+<!--Fifth-->
+    <service verb="update" noun="Order">
+        <in-parameters>
+            <parameter name="orderId"/>
+            <parameter name="orderName"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderId"/>
+            <parameter name="orderName"/>
+            <parameter name="currencyUomId"/>
+            <parameter name="salesChannelEnumId"/>
+            <parameter name="statusId"/>
+            <parameter name="productStoreId"/>
+            <parameter name="placedDate"/>
+            <parameter name="approvedDate"/>
+            <parameter name="grandTotal"/>
+        </out-parameters>
+        <actions>
+            <entity-find-one entity-name="mantle.order.OrderHeader" value-field="order">
+                <field-map field-name="orderId"/>
+            </entity-find-one>
+            <set field="currencyUomId" from="order.currencyUomId"/>
+            <set field="salesChannelEnumId" from="order.salesChannelEnumId"/>
+            <set field="productStoreId" from="order.productStoreId"/>
+            <set field="placedDate" from="order.placedDate"/>
+            <set field="approvedDate" from="order.approvedDate"/>
+            <set field="grandTotal" from="order.grandTotal"/>
+            <service-call name="update#mantle.order.OrderHeader" out-map="context"/>
+        </actions>
+    </service>
+
 </services>
+
