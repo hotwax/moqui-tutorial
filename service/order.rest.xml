@@ -3,15 +3,20 @@
     xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-3.xsd"
     name="order" displayName="Order rest api" version="${moqui_version}">
     <resource name="orders" displayName="order details" require-authentication="anonymous-all">
-        <method type="post"><service name="tutorial.order.OrderServices.create#Order"/></method>
+        <method type="post">
+            <service name="tutorial.order.OrderServices.create#Order"/></method>
         <id name="orderId">
             <method type="patch">
                 <service name="tutorial.order.OrderServices.update#Order"/>
             </method>
+            <method type="get"><service name="tutorial.order.OrderServices.get#Order"/></method>
         </id>
     </resource>
+    <resource name="orderPart" require-authentication="anonymous-all">
+        <method type="post"><service name="tutorial.order.OrderServices.create#OrderPart"/></method>
+    </resource>
 
-    <resource name="allOrders" require-authentication="anonymous-all">
+    <resource name="AllOrders" require-authentication="anonymous-all">
         <method type="get"><service name="tutorial.order.OrderServices.get#Orders"/></method>
     </resource>
 
