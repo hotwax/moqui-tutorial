@@ -104,7 +104,7 @@
             </parameter>
         </out-parameters>
         <actions>
-            <entity-find entity-name="mantle.order.OrderHeader" list="orderList"></entity-find>
+            <entity-find entity-name="mantle.order.OrderHeader" list="orderList"/>
             <set field="orders" from="[]"/>
             <set field="order_parts" from="[]"/>
             <set field="order_items" from="[]"/>
