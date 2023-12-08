@@ -1,27 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
 
-    <!-- Sample service to get Order Header details by statusId using Entity Find -->
-    <service verb="get" noun="OrderHeadersByStatus">
-        <description>
-            Service to get OrderHeader records based on the given statusId.
+<!-- Question 1-->
+
+    <service verb="get" noun="FemalePersons" type="inline">
+        <description>The default type is inline but I wrote it explicitly. It returns a list of all
+            Female Persons
         </description>
-        <in-parameters>
-            <parameter name="statusId" default-value="OrderApproved">
-                <description>The status for the Order Header. If no value is provided,
-                    the default value for statusId will be "OrderApproved."</description>
-            </parameter>
-        </in-parameters>
+        <out-parameters>
+            <parameter name="personsList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="personsList">
+                <econdition field-name="gender" value="female"/>
+            </entity-find>
+        </actions>
+    </service>
+    <!-- Question 2-->
+    <service verb="get" noun="Persons" type="inline">
+        <out-parameters>
+            <parameter name="personsList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="personsList">
+                <econdition field-name="maritalStatusEnumId" value="MarsMarried"/>
+            </entity-find>
+        </actions>
+    </service>
+    <!-- Question 3-->
+    <service verb="get" noun="LatestOrders" authenticate="anonymous-all" allow-remote="true">
         <out-parameters>
             <parameter name="ordersList"/>
         </out-parameters>
         <actions>
-            <!-- Find OrderHeader records -->
-            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
-                <econdition field-name="statusId"/>
+            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList" limit="1">
+                <order-by field-name="-placedDate"/>
             </entity-find>
+        </actions>
+    </service>
+    <!-- Question 4-->
+    <service verb="get" noun="Order" type="inline">
+        <in-parameters>
+            <parameter name="orderId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderWithId"/>
+        </out-parameters>
+        <actions>
+            <entity-find-one entity-name="mantle.order.OrderHeader" value-field="orderWithId">
 
-            <!-- The ordersList will be returned as the output. -->
+            </entity-find-one>
+        </actions>
+    </service>
+    <!-- Question 5-->
+    <service verb="get" noun="OrderHeaders" type="inline">
+        <out-parameters>
+            <parameter name="orderHeaderDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderHeader" list="orderHeaderDetails">
+                <econdition field-name="grandTotal" operator="greater" value="50"/>
+            </entity-find>
+        </actions>
+    </service>
+    <!-- Question 6 -->
+    <service verb="get" noun="OrderItems" type="inline">
+        <out-parameters>
+            <parameter name="orderItemDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderItem" list="orderItemDetails">
+                <econditions combine="and">
+                <econdition field-name="orderId" operator="equals" value="100102"/>
+                <econdition field-name="orderPartSeqId" operator="equals" value="01"/>
+                </econditions>
+            </entity-find>
+        </actions>
+    </service>
+    <!-- Question 7-->
+    <service verb="get" noun="OrderParts" type="inline">
+        <out-parameters>
+            <parameter name="orderPartDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartDetails">
+                    <econdition field-name="partTotal" operator="less-equals" value="20"/>
+            </entity-find>
+        </actions>
+    </service>
+    <!-- Question 8 -->
+    <service verb="get" noun="OrderPartData" type="inline">
+        <out-parameters>
+            <parameter name="orderPartDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartDetails">
+                <econdition field-name="facilityId" operator="equals" value="ZIRET_WH"/>
+            <select-field field-name="orderId"/>
+            <select-field field-name="orderPartSeqId"/>
+            <select-field field-name="facilityId"/>
+            <select-field field-name="partName"/>
+            <select-field field-name="customerPartId"/>
+            </entity-find>
+        </actions>
+    </service>
+    <service verb="get" noun="OrderPartsCount" type="inline">
+        <out-parameters>
+            <parameter name="orderPartDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find-count entity-name="mantle.order.OrderPart" count-field="orderId">
+                <econdition field-name="customerPartyId" operator="equals" value="CustJqp"/>
+            </entity-find-count>
+        </actions>
+    </service>
+    <!--  Question 10  -->
+    <service verb="get" noun="OrderPartsInfo" type="inline">
+        <out-parameters>
+            <parameter name="orderPartsList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartsList" distinct="true">
+                <econditions combine="and">
+                    <econdition field-name="shipmentMethodEnumId" operator="equals" value="ShtMthGround"/>
+                    <econdition field-name="facilityId" operator="equals" value="ZIRET_WH"/>
+                </econditions>
+            </entity-find>
         </actions>
     </service>
 </services>
