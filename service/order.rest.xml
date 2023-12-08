@@ -1,0 +1,43 @@
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-3.xsd"
+          name="order" displayName="Order Rest API" version="2.0.0">
+    <resource name="Party1" require-authentication="anonymous-all">
+        <method type="get">
+            <service name="tutorial.order.OrderServices.get#FemalePersons"/>
+        </method>
+    </resource>
+    <resource name="Party2" require-authentication="anonymous-all">
+        <method type="get">
+            <service name="tutorial.order.OrderServices.get#Persons"/>
+        </method>
+    </resource>
+    <resource name="Query3" require-authentication="anonymous-all">
+        <method type="get">
+            <entity name="OrderHeader" operation="list"/>
+        </method>
+    </resource>
+    <resource name="Query4" require-authentication="anonymous-all">
+        <method type="get">
+            <service name="tutorial.order.OrderServices.get#OrderHeadersByStatus"/>
+        </method>
+    </resource>
+    <resource name="Query5" require-authentication="anonymous-all">
+        <method type="get">
+            <service name="tutorial.order.OrderServices.get#LatestOrders"/>
+        </method>
+    </resource>
+    <resource name="Query6" require-authentication="anonymous-all">
+    <method type="get">
+        <service name="tutorial.order.OrderServices.get#Order"/>
+    </method>
+    </resource>
+    <resource name="Query7" require-authentication="anonymous-all">
+        <method type="get">
+            <service name="tutorial.order.OrderServices.get#OrderHeaders"/>
+        </method>
+    </resource>
+    <resource name="Query8" require-authentication="anonymous-all">
+        <method type="get">
+            <service name="tutorial.order.OrderServices.get#OrderPartsCount"/>
+        </method>
+    </resource>
+</resource>
