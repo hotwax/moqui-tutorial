@@ -75,5 +75,22 @@
         </actions>
     </service>
 
+    <service verb="get" noun="Order">
+        <description>
+            Service to get OrderHeader details for a given orderId
+        </description>
+        <in-parameters>
+            <parameter name="orderId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find-one entity-name="mantle.order.OrderHeader" value-field="orderDetails">
+                <field-map field-name="orderId" value="${orderId}"/>
+            </entity-find-one>
+            <log message="this is log"/>
+        </actions>
+    </service>
 
 </services>
