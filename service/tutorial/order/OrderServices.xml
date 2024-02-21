@@ -110,4 +110,23 @@
         </actions>
     </service>
 
+    <service verb="get" noun="OrderItems">
+        <description>
+            List all Order Item details for the order with orderId, 100102 and orderPartSeqId, 01.
+        </description>
+        <in-parameters>
+            <parameter name="orderId" default-value="100102"/>
+            <parameter name="orderPartSeqId" default-value="01"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderItemDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderItem" list="orderItemDetails">
+                <econdition field-name="orderId" value="${orderId}"/>
+                <econdition field-name="orderPartSeqId" value="${orderPartSeqId}"/>
+            </entity-find>
+        </actions>
+    </service>
+
 </services>
