@@ -60,4 +60,20 @@
         </actions>
     </service>
 
+    <service verb="get" noun="LatestOrders">
+        <description>
+            Service to get all Order Header records of latest placed orders.
+        </description>
+        <out-parameters>
+            <parameter name ="LatestOrders"/>
+        </out-parameters>
+        <actions>
+            <!-- Find OrderHeader records -->
+            <entity-find entity-name="mantle.order.OrderHeader" list="LatestOrders">
+                <order-by field-name="-placedDate"/>
+            </entity-find>
+        </actions>
+    </service>
+
+
 </services>
