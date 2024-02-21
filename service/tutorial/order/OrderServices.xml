@@ -24,4 +24,22 @@
             <!-- The ordersList will be returned as the output. -->
         </actions>
     </service>
+    <service verb="get" noun="FemalePersons">
+        <description>
+            Service to get Person records for all females.
+        </description>
+        <in-parameters>
+            <parameter name="gender" default-value="F"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="personsList"/>
+        </out-parameters>
+        <actions>
+            <!-- Find Person records -->
+            <entity-find entity-name="mantle.party.Person" list="personsList">
+                <econdition field-name="gender" value="${gender}"/>
+            </entity-find>
+        </actions>
+    </service>
+
 </services>
