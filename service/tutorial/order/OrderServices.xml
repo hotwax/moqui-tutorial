@@ -142,4 +142,24 @@
         </actions>
     </service>
 
+    <service verb="get" noun="OrderPartData">
+        <description> Find all Order Part records assigned to the facility with ZIRET_WH value.</description>
+        <in-parameters>
+            <parameter name="facilityId" default-value="ZIRET_WH"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderPartDetails" />
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartDetails">
+                <select-field field-name="orderId"/>
+                <select-field field-name="orderPartSeqId"/>
+                <select-field field-name="facilityId"/>
+                <select-field field-name="partName"/>
+                <select-field field-name="customerPartyId"/>
+                <econdition field-name="facilityId" value="${facilityId}"/>
+            </entity-find>
+        </actions>
+    </service>
+
 </services>
