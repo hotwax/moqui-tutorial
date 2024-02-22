@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-2.1.xsd">
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
 
     <!-- Sample service to get Order Header details by statusId using Entity Find -->
     <service verb="get" noun="OrderHeadersByStatus">
@@ -89,7 +89,6 @@
             <entity-find-one entity-name="mantle.order.OrderHeader" value-field="orderDetails">
                 <field-map field-name="orderId" value="${orderId}"/>
             </entity-find-one>
-            <log message="this is log"/>
         </actions>
     </service>
 
@@ -148,16 +147,16 @@
             <parameter name="facilityId" default-value="ZIRET_WH"/>
         </in-parameters>
         <out-parameters>
-            <parameter name="orderPartDetails" />
+            <parameter name="orderPartDetails"/>
         </out-parameters>
         <actions>
             <entity-find entity-name="mantle.order.OrderPart" list="orderPartDetails">
+                <econdition field-name="facilityId"/>
                 <select-field field-name="orderId"/>
                 <select-field field-name="orderPartSeqId"/>
                 <select-field field-name="facilityId"/>
                 <select-field field-name="partName"/>
                 <select-field field-name="customerPartyId"/>
-                <econdition field-name="facilityId" value="${facilityId}"/>
             </entity-find>
         </actions>
     </service>
