@@ -65,11 +65,11 @@
             Service to get all Order Header records of latest placed orders.
         </description>
         <out-parameters>
-            <parameter name ="LatestOrders"/>
+            <parameter name="latestOrders"/>
         </out-parameters>
         <actions>
             <!-- Find OrderHeader records -->
-            <entity-find entity-name="mantle.order.OrderHeader" list="LatestOrders">
+            <entity-find entity-name="mantle.order.OrderHeader" list="latestOrders">
                 <order-by field-name="-placedDate"/>
             </entity-find>
         </actions>
