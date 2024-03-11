@@ -20,8 +20,159 @@
             <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
                 <econdition field-name="statusId"/>
             </entity-find>
-
             <!-- The ordersList will be returned as the output. -->
+        </actions>
+    </service>
+
+    <service verb="get" noun="FemalePersons">
+        <description>
+            Find all Person records for all females.
+        </description>
+        <out-parameters>
+            <parameter name="personsList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="personsList">
+                <econdition field-name="gender" value="female"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="Persons">
+        <description>
+            List the Person details with MarsMarried marital status.
+        </description>
+        <out-parameters>
+            <parameter name="personsList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.party.Person" list="personsList">
+                <econdition field-name="maritalStatusEnumId" value="MarsMarried"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="LatestOrder">
+        <description>
+            Find all Order Header records so that the latest placed order appears at the top.
+        </description>
+        <out-parameters>
+            <parameter name="ordersList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderHeader" list="ordersList">
+                <order-by field-name="-statusId"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="Order">
+        <description>
+            Service to get OrderHeader records based on the given OrderId.
+        </description>
+        <in-parameters>
+            <parameter name="orderId" default-value="OrderApproved">
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderDetails"/>
+        </out-parameters>
+        <actions>
+            <!-- Find OrderHeader records -->
+            <entity-find entity-name="mantle.order.OrderHeader" list="orderDetails">
+                <econdition field-name="orderId"/>
+            </entity-find>
+            <!-- The ordersList will be returned as the output. -->
+        </actions>
+    </service>
+
+    <service verb="get" noun="OrderHeaders" >
+        <description>
+            Find all Order Header records with the grandTotal greater than 50.
+        </description>
+        <out-parameters>
+            <parameter name="orderHeaderDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderHeader" list="orderHeaderDetails">
+                <econdition field-name="grandTotal" operator="greater" value="50"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="OrderItems">
+        <description>
+            List all Order Item details for the order with orderId, 100102 and orderPartSeqId, 01.
+        </description>
+        <out-parameters>
+            <parameter name="orderItemDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderItem" list="orderItemDetails">
+                <econdition field-name="orderId" value="100102"/>
+                <econdition field-name="orderPartSeqId" value="01"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="OrderParts">
+        <description>
+            Find all Order Parts with partTotal less than equals to 20.
+        </description>
+        <out-parameters>
+            <parameter name="orderPartDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartDetails">
+                <econdition field-name="partTotal" operator="less-equals" value="20"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="OrderPartData">
+        <description>
+            Find all Order Part records assigned to the facility with ZIRET_WH value
+        </description>
+        <out-parameters>
+            <parameter name="orderPartDetails"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartDetails">
+                <econdition field-name="facilityId" value="ZIRET_WH"/>
+                <select-field field-name="orderId"/>
+                <select-field field-name="facilityId"/>
+                <select-field field-name="partName"/>
+                <select-field field-name="customerPartyId"/>
+            </entity-find>
+        </actions>
+    </service>
+
+    <service verb="get" noun="OrderPartsCount">
+        <description>
+            Find the count of order parts for the customerPartyId, “CustJqp”.
+        </description>
+        <out-parameters>
+            <parameter name="orderPartsCount"/>
+        </out-parameters>
+        <actions>
+            <entity-find-count entity-name="mantle.order.OrderPart"  count-field="orderPartsCount" >
+                <econdition field-name="customerPartyId" value="CustJqp"/>
+            </entity-find-count>
+        </actions>
+    </service>
+
+    <service verb="get" noun="OrderPartsInfo">
+        <description>
+            Find all unique Order Parts with shipmentMethodEnumId value as “ShtMthGround” and facilityId as “ZIRET_WH”.
+        </description>
+        <out-parameters>
+            <parameter name="orderPartsList"/>
+        </out-parameters>
+        <actions>
+            <entity-find entity-name="mantle.order.OrderPart" list="orderPartsList" >
+                <econdition field-name="facilityId" value="ZIRET_WH"/>
+                <econdition field-name="shipmentMethodEnumId" value="ShtMthGround"/>
+            </entity-find>
         </actions>
     </service>
 </services>
